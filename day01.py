@@ -41,7 +41,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-file = open('data.txt', 'r')
-
-lines = file.readlines()
