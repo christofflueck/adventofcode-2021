@@ -1,32 +1,33 @@
 from aocd import get_data, submit
-import pandas as pd
 
 
 def part_a(numbers, blocks):
     for drawn in numbers:
         for block in blocks:
             for row in block:
-                for i in range(len(row)):
-                    if row[i] == drawn:
+                for i, num in enumerate(row):
+                    if num == drawn:
                         row[i] = None
-                        row_done = True
-                        for j in range(len(row)):
-                            if row[j] is not None:
-                                row_done = False
-                                break
-                        if row_done:
-                            total = 0
-                            for row_2 in block:
-                                for num in row_2:
-                                    if num is not None:
-                                        total += num
-                            return total * drawn
+                        if row.count(None) == len(row):
+                            return get_total(block) * drawn
+                        cols = zip(block)
+                        for col in cols:
+                            if col.count(None) == len(row):
+                                return get_total(block) * drawn
+
+
+def get_total(block):
+    total = 0
+    for row_2 in block:
+        for num_2 in row_2:
+            if num_2 is not None:
+                total += num_2
+    return total
 
 
 def part_b(numbers, blocks):
     has_won = [False] * len(blocks)
     for drawn in numbers:
-        print(pd.DataFrame(blocks[18]))
         for block_index, block in enumerate(blocks):
             if has_won[block_index]:
                 continue
@@ -36,11 +37,15 @@ def part_b(numbers, blocks):
                 for i, num in enumerate(row):
                     if num == drawn:
                         row[i] = None
-                        if row.count(None) == len(row):
+                        cols = list(zip(*block))
+                        has_won_with_col = False
+                        for col in cols:
+                            if col.count(None) == len(row):
+                                has_won_with_col = True
+                                break
+                        if row.count(None) == len(row) or has_won_with_col:
                             has_won[block_index] = True
                             if has_won.count(False) == 0:
-                                print("Block", block_index, "was last to win, with number", drawn)
-                                print(pd.DataFrame(block))
                                 total = 0
                                 for row_2 in block:
                                     for num_2 in row_2:
@@ -52,14 +57,11 @@ def part_b(numbers, blocks):
 def main():
     data = get_data()
     blocks, numbers = parse_data(data)
-    print(pd.DataFrame(blocks[18]))
     answer_a = part_a(numbers, blocks)
-    print(answer_a)
-    # submit(answer=answer_a, part="a")
+    submit(answer=answer_a, part="a")
     blocks, numbers = parse_data(data)
 
     answer_b = part_b(numbers, blocks)
-    print(answer_b)
     submit(answer=answer_b, part="b")
 
 
