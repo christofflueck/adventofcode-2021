@@ -34,16 +34,9 @@ def part_b(numbers, blocks):
                 if has_won[block_index]:
                     break
                 for i, num in enumerate(row):
-                    if has_won[block_index]:
-                        break
                     if num == drawn:
                         row[i] = None
-                        row_done = True
-                        for j in range(len(row)):
-                            if row[j] is not None:
-                                row_done = False
-                                break
-                        if row_done:
+                        if row.count(None) == len(row):
                             has_won[block_index] = True
                             if has_won.count(False) == 0:
                                 print("Block", block_index, "was last to win, with number", drawn)
