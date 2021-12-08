@@ -28,46 +28,37 @@ def get_number(segment: dict, num: list[str]) -> int:
     print(segment, num)
     match ''.join(sorted([segment.get(d) for d in num])):
         case 'abcefg':
-            print('is', 0)
             return 0
         case 'cf':
-            print('is', 1)
             return 1
         case 'acdeg':
-            print('is', 2)
             return 2
         case 'acdfg':
-            print('is', 3)
             return 3
         case 'bcdf':
-            print('is', 4)
             return 4
         case 'abdfg':
-            print('is', 5)
             return 5
         case 'abdefg':
-            print('is', 6)
             return 6
         case 'acf':
-            print('is', 7)
             return 7
         case 'abcdefg':
-            print('is', 8)
             return 8
         case 'abcdfg':
-            print('is', 9)
             return 9
         case _:
             print(''.join(sorted([segment.get(d) for d in num])))
 
 
 def part_b(data):
-    inputs = parse_data(data, 0)
-    outputs = parse_data(data, 1)
+    inputs = [[sorted(list(num)) for num in sorted(line.split('|')[0].strip().split(), key=len)] for line in
+              data.split('\n')]
+    outputs = [[sorted(list(num)) for num in line.split('|')[1].strip().split()] for line in
+               data.split('\n')]
     total = 0
     i = 0
     for line, out in zip(inputs, outputs):
-        print("Line ", i)
         i += 1
         segments = {"a": None, "b": None, "c": None, "d": None, "e": None, "f": None,
                     "g": None}
@@ -95,8 +86,8 @@ def part_b(data):
                 diff = diff_list(one, num)
                 if len(diff) == 1:
                     six = num
-                    segments[diff[0]] = "f"
-                    segments[diff_list(one, diff)[0]] = "c"
+                    segments[diff[0]] = "c"
+                    segments[diff_list(one, diff)[0]] = "f"
                     break
 
         # d is in 4 and 3 but not in 1
@@ -123,19 +114,13 @@ def part_b(data):
                 segments[num] = "e"
                 break
 
-        for num in out:
-            total += get_number(segments, num)
+        total += int(''.join([str(get_number(segments, num)) for num in out]))
 
     return total
 
 
 def diff_list(list1, list2):
     return list(set(list1) - set(list2))
-
-
-def parse_data(data, index):
-    return [[sorted(list(num)) for num in sorted(line.split('|')[index].strip().split(), key=len)] for line in
-            data.split('\n')]
 
 
 def main():
@@ -145,7 +130,7 @@ def main():
     # submit(answer=answer_a, part="a")
 
     answer_b = part_b(data)
-    # submit(answer=answer_b, part="b")
+    submit(answer=answer_b, part="b")
 
 
 if __name__ == '__main__':
