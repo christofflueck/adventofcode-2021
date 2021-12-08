@@ -7,28 +7,55 @@ def part_a(data: str):
     return sum([line.count(2) + line.count(4) + line.count(3) + line.count(7) for line in output_lengths])
 
 
+#   0:      1:      2:      3:      4:
+#  aaaa    ....    aaaa    aaaa    ....
+# b    c  .    c  .    c  .    c  b    c
+# b    c  .    c  .    c  .    c  b    c
+#  ....    ....    dddd    dddd    dddd
+# e    f  .    f  e    .  .    f  .    f
+# e    f  .    f  e    .  .    f  .    f
+#  gggg    ....    gggg    gggg    ....
+#
+#   5:      6:      7:      8:      9:
+#  aaaa    aaaa    aaaa    aaaa    aaaa
+# b    .  b    .  .    c  b    c  b    c
+# b    .  b    .  .    c  b    c  b    c
+#  dddd    dddd    ....    dddd    dddd
+# .    f  e    f  .    f  e    f  .    f
+# .    f  e    f  .    f  e    f  .    f
+#  gggg    gggg    ....    gggg    gggg
 def get_number(segment: dict, num: list[str]) -> int:
     print(segment, num)
     match ''.join(sorted([segment.get(d) for d in num])):
         case 'abcefg':
+            print('is', 0)
             return 0
         case 'cf':
+            print('is', 1)
             return 1
         case 'acdeg':
+            print('is', 2)
             return 2
         case 'acdfg':
+            print('is', 3)
             return 3
         case 'bcdf':
+            print('is', 4)
             return 4
         case 'abdfg':
+            print('is', 5)
             return 5
         case 'abdefg':
+            print('is', 6)
             return 6
         case 'acf':
+            print('is', 7)
             return 7
         case 'abcdefg':
+            print('is', 8)
             return 8
         case 'abcdfg':
+            print('is', 9)
             return 9
         case _:
             print(''.join(sorted([segment.get(d) for d in num])))
@@ -38,7 +65,10 @@ def part_b(data):
     inputs = parse_data(data, 0)
     outputs = parse_data(data, 1)
     total = 0
+    i = 0
     for line, out in zip(inputs, outputs):
+        print("Line ", i)
+        i += 1
         segments = {"a": None, "b": None, "c": None, "d": None, "e": None, "f": None,
                     "g": None}
 
@@ -49,9 +79,8 @@ def part_b(data):
         six = None
         eight = line[-1]
         # a is in 7 but not in one
-        segments["a"] = diff_list(seven, one)[0]
+        segments[diff_list(seven, one)[0]] = "a"
 
-        print('Looking for 6 length that one - 6l == 1')
         # f is in 1 but not in 6
         # if f is known c is known by 1-f = c
         for num in line:
@@ -65,34 +94,33 @@ def part_b(data):
             if len(num) == 6:
                 diff = diff_list(one, num)
                 if len(diff) == 1:
-                    print('found 6')
                     six = num
-                    segments["f"] = diff[0]
-                    segments["c"] = diff_list(one, diff[0])[0]
+                    segments[diff[0]] = "f"
+                    segments[diff_list(one, diff)[0]] = "c"
                     break
 
         # d is in 4 and 3 but not in 1
         for num in three:
             if num in four and num not in one:
-                segments["d"] = num
+                segments[num] = "d"
                 break
 
         # b is in 4 but not in 3
         for num in four:
             if num not in three:
-                segments["b"] = num
+                segments[num] = "b"
                 break
 
         # g is in 3 but not in 7 or 4
         for num in three:
             if num not in seven and num not in four:
-                segments["g"] = num
+                segments[num] = "g"
                 break
 
         # e is the last one left
         for num in eight:
-            if num not in segments.values():
-                segments["e"] = num
+            if segments[num] is None:
+                segments[num] = "e"
                 break
 
         for num in out:
