@@ -33,7 +33,8 @@ def part_a(data):
     return sum([height_map[point] + 1 for point in low_points])
 
 
-def _get_neighbor(height_map: Dict[Tuple[int, int], int], coords: Tuple[int, int], neighbors: List[Tuple[int, int]], basins):
+def _get_neighbor(height_map: Dict[Tuple[int, int], int], coords: Tuple[int, int], neighbors: List[Tuple[int, int]],
+                  basins):
     if coords in height_map and coords not in basins and height_map[coords] != 9:
         neighbors.append(coords)
 
@@ -66,12 +67,11 @@ def part_b(data) -> int:
                 for neighbor in curr_neighbors:
                     neighbors.extend(get_neighbors(height_map, neighbor, basins))
                     neighbors.remove(neighbor)
-                    basins.append(neighbor)
-                    current_basin += 1
+                    if neighbor not in basins:
+                        basins.append(neighbor)
+                        current_basin += 1
             all_basin_sizes.append(current_basin)
     all_basin_sizes = sorted(all_basin_sizes)
-    print(all_basin_sizes)
-    print(all_basin_sizes[-1], all_basin_sizes[-2], all_basin_sizes[-3])
     return all_basin_sizes[-1] * all_basin_sizes[-2] * all_basin_sizes[-3]
 
 
@@ -82,7 +82,7 @@ def main():
     submit(answer=answer_a, part="a")
 
     answer_b = part_b(data)
-    # submit(answer=answer_b, part="b")
+    submit(answer=answer_b, part="b")
 
 
 if __name__ == '__main__':
