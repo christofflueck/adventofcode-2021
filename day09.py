@@ -1,4 +1,4 @@
-from typing import Dict, Tuple, List, Set
+from typing import Dict, Tuple, Set
 
 from aocd import get_data, submit
 
