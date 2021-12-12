@@ -65,7 +65,8 @@ def part_b(data):
                     has_two_small = True
                     break
             for next_cave in d[curr_cave]:
-                if (next_cave == next_cave.lower() and next_cave in path_split and has_two_small) or next_cave == "start":
+                if (
+                        next_cave == next_cave.lower() and next_cave in path_split and has_two_small) or next_cave == "start":
                     continue
                 next_path = f"{path},{next_cave}"
                 if next_cave == "end":
