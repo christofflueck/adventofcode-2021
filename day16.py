@@ -28,10 +28,10 @@ class BITSPacket:
         else:
             literal_str = ''
             while self.take_bits(1) == '1':
-                literal_str += str(int(self.take_bits(4), 2))
+                literal_str += self.take_bits(4)
 
-            literal_str += str(int(self.take_bits(4), 2))
-            self.literal = int(literal_str)
+            literal_str += self.take_bits(4)
+            self.literal = int(literal_str, 2)
 
     def take_bits(self, num_bits):
         self.total_length += num_bits
@@ -48,6 +48,7 @@ class BITSPacket:
 
     def calculate(self):
         if self.type == 4:
+            print("Literal", self.literal)
             return self.literal
         else:
             values = [packet.calculate() for packet in self.sub_packets]
