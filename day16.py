@@ -48,31 +48,23 @@ class BITSPacket:
 
     def calculate(self):
         if self.type == 4:
-            print("Literal", self.literal)
             return self.literal
         else:
             values = [packet.calculate() for packet in self.sub_packets]
             match self.type:
                 case 0:
-                    print("Summing", values)
                     return sum(values)
                 case 1:
-                    print("Multilying", values)
                     return prod(values)
                 case 2:
-                    print("Min", values)
                     return min(values)
                 case 3:
-                    print("Max", values)
                     return max(values)
                 case 5:
-                    print("Gt", values)
                     return 1 if values[0] > values[1] else 0
                 case 6:
-                    print("lt", values)
                     return 1 if values[0] < values[1] else 0
                 case 7:
-                    print("eq", values)
                     return 1 if values[0] == values[1] else 0
 
 
@@ -100,9 +92,7 @@ def main():
     ]
     for ex_data, result in examples:
         example_a = part_a(ex_data)
-        print(example_a)
         assert example_a == result
-        print("Success")
 
     answer_a = part_a(data)
     submit(answer=answer_a, part="a")
@@ -119,9 +109,7 @@ def main():
     ]
     for ex_data, result in examples:
         example_b = part_b(ex_data)
-        print(example_b)
         assert example_b == result
-        print("Success")
 
     answer_b = part_b(data)
     submit(answer=answer_b, part="b")
